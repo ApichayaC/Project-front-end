@@ -21,37 +21,12 @@ export default function Home() {
     setItem(Object.assign([], items.data))
   }
 
-  const printCat = () => {
-    return cat.map((item, index) => {
-      return (
-        <tr key={index}>
-          <td>{item.id}</td>
-          <td>{item.firstName}</td>
-          <td>{item.branch}</td>
-          <td>{item.age}</td>
-        </tr>
-
-      )
-    })
-  }
-
 
   useEffect(() => {
     getCats(), getItems()
   }, [])
   return (
     <div>
-
-
-      {/* <table>
-        <tr>
-          <th>ID</th>
-          <th>Firstname</th>
-          <th>Branch</th>
-          <th>Age</th>
-        </tr>
-        {printCat()}    
-      </table> */}
       <AddCats cats={cat} items={item} URL={URL} />
       <AddItems items={item} cats={cat} URL={URL} />
     </div>
