@@ -1,65 +1,59 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+//import { Cat } from 'backend/src/cats/cat.model';
+//import { Item } from 'frontend/src/items/item.model';
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import AddItems from '../components/addItems'
+import AddCats from '../components/addCats'
 
 export default function Home() {
+
+  const URL = 'http://localhost:3001'
+
+  const [cat, setCat] = useState([])
+  const getCats = async () => {
+    let cats = await axios.get(URL + '/cats')
+    setCat(Object.assign([], cats.data))
+  }
+
+  const [item, setItem] = useState([])
+  const getItems = async () => {
+    let items = await axios.get(URL + '/items')
+    setItem(Object.assign([], items.data))
+  }
+
+  const printCat = () => {
+    return cat.map((item, index) => {
+      return (
+        <tr key={index}>
+          <td>{item.id}</td>
+          <td>{item.firstName}</td>
+          <td>{item.branch}</td>
+          <td>{item.age}</td>
+        </tr>
+
+      )
+    })
+  }
+
+
+  useEffect(() => {
+    getCats(), getItems()
+  }, [])
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+      {/* <table>
+        <tr>
+          <th>ID</th>
+          <th>Firstname</th>
+          <th>Branch</th>
+          <th>Age</th>
+        </tr>
+        {printCat()}    
+      </table> */}
+      <AddCats cats={cat} items={item} URL={URL} />
+      <AddItems items={item} cats={cat} URL={URL} />
     </div>
   )
 }
